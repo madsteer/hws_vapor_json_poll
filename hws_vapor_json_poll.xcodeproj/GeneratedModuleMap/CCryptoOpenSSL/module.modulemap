@@ -1,0 +1,4 @@
+module CCryptoOpenSSL {
+    umbrella "/Users/cory/dev/git/vapor/hws_vapor_json_poll/.build/checkouts/crypto.git--3912018235297721704/Sources/CCryptoOpenSSL/include"
+    export *
+}
