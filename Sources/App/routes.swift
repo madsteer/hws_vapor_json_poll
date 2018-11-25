@@ -1,17 +1,35 @@
 import Routing
 import Vapor
+import Foundation
 
 /// Register your application's routes here.
 ///
 /// [Learn More →](https://docs.vapor.codes/3.0/getting-started/structure/#routesswift)
 public func routes(_ router: Router) throws {
-    router.post("polls", "create") { req -> Future<Poll> in
-        let poll = Poll(id: nil, title: "Title", option1: "Option 1", option2: "Option 2", votes1: 0, votes2: 0)
-        return Future.map(on: req) { return poll }
+    router.post(Poll.self, at: "polls") { req, poll -> Future<Poll> in
+        return poll.save(on: req)
     }
 
-    router.get("polls", "list") { req -> Future<[Poll]> in
-        let poll = Poll(id: nil, title: "Title", option1: "Option 1", option2: "Option 2", votes1: 0, votes2: 0)
-        return Future.map(on: req) { return [poll] }
+    router.put("polls", UUID.parameter, Int.parameter) { req -> Future<Poll> in
+        let id = try req.parameters.next(UUID.self)
+        let vote = try req.parameters.next(Int.self)
+
+        return try Poll.find(id, on: req).flatMap(to: Poll.self) { poll in
+            guard var poll = poll else {
+                throw Abort(.notFound)
+            }
+
+            if vote == 1 {
+                poll.votes1 += 1
+            } else {
+                poll.votes2 += 1
+            }
+
+            return poll.save(on: req)
+        }
+    }
+
+    router.get("polls") { req -> Future<[Poll]> in
+        return Poll.query(on: req).all()
     }
 }
