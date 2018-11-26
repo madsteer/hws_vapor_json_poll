@@ -36,4 +36,9 @@ public func routes(_ router: Router) throws {
     router.get("poll", UUID.parameter) { req -> Future<Poll> in
         return Poll.find(try req.parameters.next(UUID.self), on: req).unwrap(or: Abort(.notFound))
     }
+
+    router.delete("poll", UUID.parameter) { req -> Future<HTTPStatus> in
+        return Poll.find(try req.parameters.next(UUID.self), on: req).unwrap(or: Abort(.notFound)).delete(on: req).transform(to: .noContent)
+
+    }
 }
