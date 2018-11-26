@@ -32,4 +32,8 @@ public func routes(_ router: Router) throws {
     router.get("polls") { req -> Future<[Poll]> in
         return Poll.query(on: req).all()
     }
+
+    router.get("poll", UUID.parameter) { req -> Future<Poll> in
+        return Poll.find(try req.parameters.next(UUID.self), on: req).unwrap(or: Abort(.notFound))
+    }
 }
