@@ -1,6 +1,7 @@
 import Vapor
 import Fluent
 import FluentSQLite
+import Leaf
 
 /// Called before your application initializes.
 ///
@@ -28,4 +29,7 @@ public func configure(
     var migrationConfig = MigrationConfig()
     migrationConfig.add(model: Poll.self, database: .sqlite)
     services.register(migrationConfig)
+
+    try services.register(LeafProvider())
+    config.prefer(LeafRenderer.self, for: ViewRenderer.self) 
 }

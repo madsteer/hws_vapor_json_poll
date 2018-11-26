@@ -1,0 +1,9 @@
+<html>
+<head>
+<title>#get(title)</title>
+</head>
+<body>
+#get(body)
+#embed("footer")
+</body>
+</html>

@@ -6,6 +6,11 @@ import Foundation
 ///
 /// [Learn More →](https://docs.vapor.codes/3.0/getting-started/structure/#routesswift)
 public func routes(_ router: Router) throws {
+    router.get { req -> Future<View> in
+        let context = [String: String]()
+        return try req.view().render("home", context)
+    }
+
     router.post(Poll.self, at: "polls") { req, poll -> Future<Poll> in
         return poll.save(on: req)
     }
