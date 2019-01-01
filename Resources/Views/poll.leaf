@@ -1,22 +1,23 @@
 #set("body") {
     <div class="row">
-        <div class="col-md-2"><strong>Option 1:</strong></div>
-        <div class="col-md-4">#get(option1)</div>
-        <div class="col-md-2"><strong>Votes:</strong></div>
-        <div class="col-md-2">#get(votes1)</div>
+        <div class="col-md-2"><strong>Options</strong></div>
+        <div class="col-md-2"><center>#get(option1)</center></div>
+        <div class="col-md-2"><center>#get(option2)</center></div>
     </div>
     <div class="row">
-        <div class="col-md-2"><strong>Option 2:</strong></div>
-        <div class="col-md-4">#get(option2)</div>
-        <div class="col-md-2"><strong>Votes:</strong></div>
-        <div class="col-md-2">#get(votes2)</div>
-    </div>
-    <p/>
-    <div class="row">
-        <div class="col-md-8"><input type="radio" name="option" value="1"> #get(option1)</input></div>
+        <div class="col-md-2"><strong>Votes</strong></div>
+        <div class="col-md-2"><center>#get(votes1)</center></div>
+        <div class="col-md-2"><center>#get(votes2)</center></div>
     </div>
     <div class="row">
-        <div class="col-md-8"><input type="radio" name="option"  value="2"> #get(option2)</input></div>
+        <div class="col-md-2"><strong>Add Vote</strong></div>
+        <div class="col-md-2"><center><input type="radio" name="option" value="1"></input></center></div>
+        <div class="col-md-2"><center><input type="radio" name="option" value="2"></input></center></div>
+        <div class="col-md-1">
+            <form method="post">
+                <button type="submit" class="btn btn-sm btn-primary">Vote</button>
+            </form>
+        </div>
     </div>
     <p/>
 }
