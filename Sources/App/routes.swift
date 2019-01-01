@@ -6,16 +6,40 @@ import Foundation
 ///
 /// [Learn More →](https://docs.vapor.codes/3.0/getting-started/structure/#routesswift)
 public func routes(_ router: Router) throws {
-    router.get("polls") { req -> Future<View> in
-        let context = [String: [Poll]]()
-        let allPolls = Poll.query(on: req).all().map(to: [Poll])
-        let allPollsDict =
-        context.append("allPools", allPolls)
-        return try req.view().render("home", context)
+    router.get { req -> Future<View> in
+        struct PollsContext: Codable {
+            var allPolls: [Poll]
+        }
+
+        return Poll.query(on: req).all().flatMap(to: View.self) { polls in
+            let context = PollsContext(allPolls: polls)
+            return try req.view().render("home", context)
+        }
     }
-//    router.get("polls") { req  in
-//        return "Hello, world!"
-//    }
+
+    router.get("poll", UUID.parameter) { req -> Future<View> in
+        struct PollContext: Codable {
+            var ttl: String
+            var option1: String
+            var option2: String
+            var votes1: Int
+            var votes2: Int
+        }
+        return Poll.find(try req.parameters.next(UUID.self), on: req)
+            .flatMap(to: View.self) { poll in
+
+                guard let poll = poll else {
+                    throw Abort(.notFound)
+                }
+
+                let context = PollContext(ttl: poll.title,
+                                          option1: poll.option1,
+                                          option2: poll.option2,
+                                          votes1: poll.votes1,
+                                          votes2: poll.votes2)
+                return try req.view().render("poll", context)
+        }
+    }
 
     router.group("polls", "api") { api in
         api.post(Poll.self, at: "polls") { req, poll -> Future<Poll> in

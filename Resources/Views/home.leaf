@@ -1,21 +1,12 @@
 #set("body") {
-    <p>JSON Polling is a leading polling service</p>
-    <br/>
-    <p>Choose a Poll to view:</p>
+    <p><h2>Choose a Poll to view:</h2></p>
     <ul>
     #for(poll in allPolls) {
-        <li><a href="/polls/api/poll/#(poll.id)">#Capitalize(poll.title)</a></li>
+        <li><a href="/poll/#(poll.id)">#capitalize(poll.title)</a></li>
     }
     </ul>
 }
 
-#if(poll) {
-    #set("title") {#capitalize(title)}
-    #set("h1") {#capitalize(title)}
-    #set("body") {
-        <p>
-    }
-}
-
 #set("title") {Welcome}
+#set("h1") { JSON Polling is a leading polling service }
 #embed("master")
