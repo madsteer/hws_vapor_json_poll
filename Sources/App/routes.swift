@@ -18,13 +18,6 @@ public func routes(_ router: Router) throws {
     }
 
     router.get("poll", UUID.parameter) { req -> Future<View> in
-        struct PollContext: Codable {
-            var ttl: String
-            var option1: String
-            var option2: String
-            var votes1: Int
-            var votes2: Int
-        }
         return Poll.find(try req.parameters.next(UUID.self), on: req)
             .flatMap(to: View.self) { poll in
 
@@ -38,6 +31,39 @@ public func routes(_ router: Router) throws {
                                           votes1: poll.votes1,
                                           votes2: poll.votes2)
                 return try req.view().render("poll", context)
+        }
+    }
+
+    router.post("poll", UUID.parameter) { req -> Future<View> in
+        
+        struct FormData: Codable {
+            var option: String
+        }
+        
+        return try req.content.decode(FormData.self).flatMap(to: View.self) { formData in
+            return Poll.find(try req.parameters.next(UUID.self), on: req).flatMap(to: View.self) { poll in
+                guard var poll = poll else {
+                    throw Abort(.badRequest)
+                }
+
+                if formData.option == "1" {
+                    poll.votes1 += 1
+                } else if formData.option == "2" {
+                    poll.votes2 += 1
+                } else {
+                    throw Abort(.badRequest)
+                }
+
+                return poll.save(on: req).flatMap(to: View.self) { poll in
+                    let context = PollContext(ttl: poll.title,
+                                              option1: poll.option1,
+                                              option2: poll.option2,
+                                              votes1: poll.votes1,
+                                              votes2: poll.votes2)
+
+                    return try req.view().render("poll", context)
+                }
+            }
         }
     }
 

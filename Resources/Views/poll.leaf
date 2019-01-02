@@ -9,16 +9,16 @@
         <div class="col-md-2"><center>#get(votes1)</center></div>
         <div class="col-md-2"><center>#get(votes2)</center></div>
     </div>
-    <div class="row">
-        <div class="col-md-2"><strong>Add Vote</strong></div>
-        <div class="col-md-2"><center><input type="radio" name="option" value="1"></input></center></div>
-        <div class="col-md-2"><center><input type="radio" name="option" value="2"></input></center></div>
-        <div class="col-md-1">
-            <form method="post">
-                <button type="submit" class="btn btn-sm btn-primary">Vote</button>
-            </form>
+    <form method="post">
+        <div class="row">
+            <div class="col-md-2"><strong>Add Vote</strong></div>
+            <div class="col-md-2"><center><input type="radio" name="option" value="1"></input></center></div>
+            <div class="col-md-2"><center><input type="radio" name="option" value="2"></input></center></div>
+            <div class="col-md-1">
+                <input type="submit" value="Vote" class="btn-primary"></input>
+            </div>
         </div>
-    </div>
+    </form>
     <p/>
 }
 
